@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id            String         @id @default(cuid())
+    name          String         @db.VarChar(255)
+    email         String         @unique @db.VarChar(255)
+    password      String         @db.Char(60)
+    profile_img   String         @default("/img/profile_placeholder.png")
+    roles         RoleUser[]
+    spots         Spot[]
+    comments      Comment[]
+    favoriteSpots FavoriteSpot[]
+}
+
+model Role {
+    id    String     @id @default(cuid())
+    name  String     @db.VarChar()
+    users RoleUser[]
+}
+
+model RoleUser {
+    user    User   @relation(fields: [user_id], references: [id])
+    user_id String
+    role    Role   @relation(fields: [role_id], references: [id])
+    role_id String
+
+    @@id([user_id, role_id])
+}
+
+model Spot {
+    id          String         @id @default(cuid())
+    slug        String         @unique
+    name        String         @db.VarChar(255)
+    street      String         @db.VarChar(255)
+    city        String         @db.VarChar(255)
+    description String         @db.Text
+    status      Boolean        @default(false)
+    cover_img   String
+    author      User           @relation(fields: [author_id], references: [id])
+    author_id   String
+    created_at  DateTime       @default(now()) @db.Timestamptz()
+    updated_at  DateTime       @default(now()) @db.Timestamptz()
+    comments    Comment[]
+    likedBy     FavoriteSpot[]
+}
+
+model Comment {
+    id         String   @id @default(cuid())
+    spot       Spot     @relation(fields: [spot_id], references: [id])
+    spot_id    String
+    author     User     @relation(fields: [author_id], references: [id])
+    author_id  String
+    rating     Decimal  @db.Decimal(2, 1)
+    nb_rate    Int      @default(0) @db.Integer
+    status     Boolean  @default(false)
+    created_at DateTime @default(now()) @db.Timestamptz()
+}
+
+model FavoriteSpot {
+    spot    Spot   @relation(fields: [spot_id], references: [id])
+    spot_id String
+    user    User   @relation(fields: [user_id], references: [id])
+    user_id String
+
+    @@id([spot_id, user_id])
+}

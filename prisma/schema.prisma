@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-    id            String         @id @default(cuid())
+    id            String         @id @default(uuid())
     name          String         @db.VarChar(255)
     email         String         @unique @db.VarChar(255)
     password      String         @db.Char(60)
@@ -23,7 +23,7 @@ model User {
 }
 
 model Role {
-    id    String     @id @default(cuid())
+    id    String     @id @default(uuid())
     name  String     @db.VarChar()
     users RoleUser[]
 }
@@ -38,7 +38,7 @@ model RoleUser {
 }
 
 model Spot {
-    id          String         @id @default(cuid())
+    id          String         @id @default(uuid())
     slug        String         @unique
     name        String         @db.VarChar(255)
     street      String         @db.VarChar(255)
@@ -55,7 +55,7 @@ model Spot {
 }
 
 model Comment {
-    id         String   @id @default(cuid())
+    id         String   @id @default(uuid())
     spot       Spot     @relation(fields: [spot_id], references: [id])
     spot_id    String
     author     User     @relation(fields: [author_id], references: [id])

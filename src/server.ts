@@ -1,6 +1,7 @@
 import express from 'express';
 import { config } from 'dotenv-flow';
 import { engine } from 'express-handlebars';
+import DashboardRoutes from './routes/DashboardRoutes';
 
 config();
 
@@ -17,6 +18,8 @@ app.use(express.static('public'));
 app.get('/', (_, res) => {
     res.render('pages/home/index');
 });
+
+app.use('/dashboard', DashboardRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on : ${BASE_URL}:${PORT} [${NODE_ENV}]`);

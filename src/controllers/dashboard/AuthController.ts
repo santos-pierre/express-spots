@@ -8,6 +8,9 @@ const showLogin = (_: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    if (req.hasFormError) {
+        return res.render('pages/dashboard/login', { errors: req.formErrors });
+    }
     const user = await User.getUserByEmail(email);
     if (!user) {
         //TODO Error Display

@@ -1,4 +1,3 @@
-import { User } from '@prisma/client';
 import 'express-session';
 
 declare module 'express-session' {

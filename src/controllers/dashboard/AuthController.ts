@@ -1,13 +1,6 @@
 import { Request, Response } from 'express';
-import expressSession from 'express-session';
 import User from '../../models/User';
 import bcrypt from 'bcrypt';
-
-interface Session extends expressSession.Session {
-    user?: {
-        email: string;
-    };
-}
 
 const showLogin = (_: Request, res: Response) => {
     res.render('pages/dashboard/login', { layout: 'app', title: 'Dashboard - Login' });
@@ -27,10 +20,21 @@ const login = async (req: Request, res: Response) => {
         return res.json({ message: 'Wrong Password' });
     }
     // Create Session
+    req.session.user = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        profile_img: user.profile_img,
+    };
+
+    return res.redirect('/');
 };
 
-const logout = (_: Request, res: Response) => {
-    res.send(501);
+const logout = (req: Request, res: Response) => {
+    //@ts-ignore
+    req.session.destroy();
+    res.clearCookie('SPOT_SESSION');
+    res.redirect('/');
 };
 
 const AuthController = { login, logout, showLogin };

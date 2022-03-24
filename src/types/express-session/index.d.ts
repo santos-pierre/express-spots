@@ -1,8 +1,13 @@
-declare namespace Request {
-    export interface Session {
-        user: {
+import { User } from '@prisma/client';
+import 'express-session';
+
+declare module 'express-session' {
+    interface SessionData {
+        user?: {
+            id: string;
+            name: string;
             email: string;
-            user_id: string;
+            profile_img: string;
         };
     }
 }

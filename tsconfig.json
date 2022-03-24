@@ -11,7 +11,7 @@
         "strict": true /* Enable all strict type-checking options. */,
         "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied `any` type.. */,
         "alwaysStrict": true /* Ensure 'use strict' is always emitted. */,
-        "typeRoots": ["./src/@types/**/*", "./node_modules/@types"]
+        "typeRoots": ["./src/@types", "./node_modules/@types"]
     },
     "files": ["./src/server.ts"],
     "include": ["src/@types/**/*"]

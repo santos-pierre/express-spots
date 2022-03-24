@@ -1,6 +1,7 @@
 import express from 'express';
 import { config } from 'dotenv-flow';
-import { engine } from 'express-handlebars';
+import { create } from 'express-handlebars';
+import * as helpers from './lib/handlebars/helpers';
 import session from 'express-session';
 import connectPG from 'connect-pg-simple';
 import DashboardRoutes from './routes/DashboardRoutes';
@@ -12,9 +13,11 @@ const { PORT, BASE_URL, NODE_ENV, SECRET_SESSION } = process.env;
 const app = express();
 
 /*=============START VIEW ENGINE=================*/
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
+const hbs = create({ helpers, extname: '.hbs' });
+app.engine('.hbs', hbs.engine);
+app.set('view engine', '.hbs');
 app.set('views', `${process.cwd()}/src/views`);
+
 /*==============END VIEW ENGINE==================*/
 
 /*==============START STATIC FILES===============*/
